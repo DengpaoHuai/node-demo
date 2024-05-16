@@ -1,8 +1,10 @@
 import { Movie } from "../models/movie.schema.js";
 import Joi from "joi";
 
-export const getMovies = (req, res) => {
-  res.json({ message: "Hello World" });
+export const getMovies = async (req, res) => {
+  const movies = await Movie.find({});
+  console.log(movies);
+  res.json(movies);
 };
 
 export const createMovie = async (req, res) => {
@@ -21,8 +23,14 @@ export const createMovie = async (req, res) => {
   const movie = new Movie(req.body);
   await movie.save();
 
+  res.json(movie);
+};
+
+export const deleteMovie = async (req, res) => {
+  const movieId = req.params.id;
+  await Movie.findByIdAndDelete(movieId);
+
   res.json({
-    message: "Movie created successfully",
-    movie,
+    message: "Movie deleted successfully",
   });
 };
